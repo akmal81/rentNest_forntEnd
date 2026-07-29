@@ -90,35 +90,119 @@ export type MyProfileResponse = {
 export interface IUser {
     success: boolean,
     message: string,
-    data:{
-        myProfile:{
+    data: {
+        myProfile: {
             id: string
-    name: string,
-    email: string,
-    status: string,
-    role: string,
-    createdAt: string,
-    updatedAt: string,
-    profile: {
-        id: string,
-        profilePhoto?: string,
-        bio?: string,
-        phoneNumber?: string,
-        userId: string,
-        createdAt: string,
-        updatedAt: string
-    }
+            name: string,
+            email: string,
+            status: string,
+            role: string,
+            createdAt: string,
+            updatedAt: string,
+            profile: {
+                id: string,
+                profilePhoto?: string,
+                bio?: string,
+                phoneNumber?: string,
+                userId: string,
+                createdAt: string,
+                updatedAt: string
+            }
         }
     }
 }
 
 export type NavbarProps = {
-    user?: IUser 
+    user?: IUser
 }
 
 
 export type SidebarItems = {
     label: string,
-        href: string,
-        icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>
+    href: string,
+    icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>
+}
+
+
+
+export interface Property {
+
+    id: string;
+    title: string;
+    description: string;
+    address: string;
+    city: string;
+    division: string;
+    bedRoom: number;
+    bathRoom: number;
+    squareFeet: number;
+    amenities: string[];
+    rentAmount: number;
+    availablity: string;
+    isFeatured: boolean;
+    images?: string[];
+    category: {
+        name: string;
+    };
+};
+
+export interface IPropertiesProps {
+    properties: Property[]
+}
+
+
+
+// export interface LandlordProfile {
+//     phoneNumber: string | null;
+// }
+
+// export interface Landlord {
+//     name: string;
+//     email: string;
+//     profile: LandlordProfile | null;
+// }
+
+// export interface Category {
+//     name: string;
+// }
+
+export interface PropertyDetails {
+    id: string;
+    title: string;
+    description: string;
+    address: string;
+    city: string;
+    division: string;
+    bedRoom: number;
+    bathRoom: number;
+    squareFeet: number;
+    amenities: string[];
+    rentAmount: number;
+    availablity: string;
+    landlordId: string;
+    categoryId: string;
+    isDeleted: boolean;
+    isFeatured: boolean;
+    createdAt: string;
+    updatedAt: string;
+    images?: string[];
+    category: {
+        name: string;
+    };
+    landlord: {
+        name: string;
+        email: string;
+        profile: {
+            phoneNumber: string | null;
+        };
+    }
+}
+
+export interface SinglePropertyApiResponse {
+    success: boolean;
+    statusCode: number;
+    message: string;
+    data: {
+        propertyDetails: PropertyDetails;
+    };
 }

@@ -91,6 +91,8 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
 
     function onSubmit(data: RegisterFormValues) {
         React.startTransition(() => { formAction(data) })
+
+        // more work auto login
     }
 
     return (
