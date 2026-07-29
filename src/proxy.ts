@@ -84,11 +84,13 @@ export async function proxy(request: NextRequest) {
     if (!accessToken && !isPublic && !isAuthRoute) {
 
         const loginUrl = new URL('/login', request.url)
-        loginUrl.searchParams.set("RedirectTo", pathname)
+        loginUrl.searchParams.set("redirectTo", pathname)
         return NextResponse.redirect(loginUrl)
 
     }
 
+
+ 
 
 
     if (pathname.startsWith("/dashboard/tenant") && userRole !== "TENANT") {
@@ -100,6 +102,8 @@ export async function proxy(request: NextRequest) {
     else if (pathname.startsWith("/dashboard/admin") && userRole !== "ADMIN") {
         return NextResponse.redirect(new URL('/not-found', request.url))
     }
+
+   
 
 
 

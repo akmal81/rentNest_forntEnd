@@ -40,7 +40,7 @@ export const  LoginAction= async (redirectTo : string, prevState: LoginState, da
         email: data.email,
         password: data.password,
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/auth/login`, {
+    const res = await fetch(`${backendApi}/api/auth/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -72,11 +72,11 @@ export const  LoginAction= async (redirectTo : string, prevState: LoginState, da
         }
 
     if (decodedToken.role === "TENANT") {
-        redirect("/dashboard");
+        redirect("/dashboard/tenant");
     } else if (decodedToken.role === "LANDLORD") {
-        redirect("/dashboard");
+        redirect("/dashboard/landlord");
     } else if (decodedToken.role === "ADMIN") {
-        redirect("/dashboard");
+        redirect("/dashboard/admin");
     }
 
     return result
