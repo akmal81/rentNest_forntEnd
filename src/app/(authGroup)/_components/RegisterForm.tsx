@@ -38,6 +38,11 @@ const registerSchema = z
             .string()
             .min(1, "Email is required")
             .email("Invalid email address"),
+        profilePhoto: z
+            .string()
+            .url("Invalid URL format")
+            .nullable()
+            .optional(),
         password: z
             .string()
             .min(6, "Password must be at least 6 characters long"),
@@ -54,8 +59,8 @@ export type RegisterFormValues = z.infer<typeof registerSchema>
 
 export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
     const [state, formAction, isPending] = React.useActionState(RegistarAction, null);
- 
-  
+
+
     const {
         register,
         handleSubmit,
@@ -67,6 +72,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
         defaultValues: {
             name: "",
             email: "",
+            profilePhoto:"",
             password: "",
             confirmPassword: "",
         },
@@ -84,7 +90,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
 
 
     function onSubmit(data: RegisterFormValues) {
-        React.startTransition(()=>{formAction(data)})
+        React.startTransition(() => { formAction(data) })
     }
 
     return (
@@ -124,6 +130,19 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
                             {errors.email && <FieldError errors={[errors.email]} />}
                         </Field>
 
+                        {/* Photourl */}
+                        <Field data-invalid={!!errors.profilePhoto}>
+                            <FieldLabel htmlFor="profilePhoto">Profile Photo</FieldLabel>
+                            <Input
+                                {...register("profilePhoto")}
+                                id="profilePhoto"
+                                type="profilePhoto"
+                                placeholder="https://www....."
+                                aria-invalid={!!errors.profilePhoto}
+                            />
+                            {errors.profilePhoto && <FieldError errors={[errors.profilePhoto]} />}
+                        </Field>
+
                         {/* Password Field */}
                         <Field data-invalid={!!errors.password}>
                             <FieldLabel htmlFor="password">Password</FieldLabel>
@@ -158,7 +177,7 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
                                 <Button type="submit">
                                     {isPending ? "Registar in progress..." : "Register"}
                                 </Button>
-        
+
                                 <FieldDescription className="px-6 text-center">
                                     Already have an account? <Link href="/login" className="text-primary">Login</Link>
                                 </FieldDescription>

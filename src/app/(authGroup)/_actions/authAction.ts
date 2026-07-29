@@ -14,6 +14,7 @@ export const RegistarAction = async (prevState: RegisterApiResponse, data: Regis
     const payload = {
         name: data.name,
         email: data.email,
+        profilePhoto:data.profilePhoto,
         password: data.password
     }
     console.log("Backend URL:", process.env.NEXT_PUBLIC_BACKEND_API_URL);
