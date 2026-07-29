@@ -1,3 +1,6 @@
+import { LucideProps } from "lucide-react";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
+
 export interface UserProfile {
     id: string;
     profilePhoto?: string | null;
@@ -11,7 +14,7 @@ export interface UserProfile {
 type ActiveStatus = {
     status: 'ACTIVE' | 'BLOCK'
 }
-type Roles = {
+export type Roles = {
     role: 'TENANT' | 'LANDLORD' | 'ADMIN'
 }
 
@@ -56,7 +59,7 @@ export type MyProfileData = {
     name: string,
     email: string,
     status: ActiveStatus,
-    role: Roles,
+    role: string,
     createdAt: string,
     updatedAt: string,
     profile: {
@@ -92,8 +95,8 @@ export interface IUser {
             id: string
     name: string,
     email: string,
-    status: ActiveStatus,
-    role: Roles,
+    status: string,
+    role: string,
     createdAt: string,
     updatedAt: string,
     profile: {
@@ -110,5 +113,12 @@ export interface IUser {
 }
 
 export type NavbarProps = {
-    user: IUser 
+    user?: IUser 
+}
+
+
+export type SidebarItems = {
+    label: string,
+        href: string,
+        icon: ForwardRefExoticComponent<Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>>
 }

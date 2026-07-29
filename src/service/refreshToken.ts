@@ -35,7 +35,8 @@ export const isAccessTokenExist = async()=>{
     const refreshToken = cookieStore.get("refreshToken")?.value || null;
 
     if(!accessToken && !refreshToken){
-        throw new Error("User Not Logged In!")
+        // throw new Error("User Not Logged In!");
+        return false
     }
 
     const decodedAccessToken = accessToken? jwtUtils.verifiedToken(accessToken, process.env.JWT_ACCESS_SECRET as string) : null;

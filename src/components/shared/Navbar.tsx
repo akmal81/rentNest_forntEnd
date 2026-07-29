@@ -23,7 +23,9 @@ import { logout } from "@/service/logout"
 
 export function Navbar({ user }: NavbarProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
-    console.log(user.data.myProfile.name, "navbar");
+
+
+
     const navLinks = [
         { name: "HOME", href: "/" },
         { name: "SEARCH", href: "/search" },
@@ -41,6 +43,17 @@ export function Navbar({ user }: NavbarProps) {
             .join("")
             .toUpperCase()
             .slice(0, 2)
+    }
+
+    let dashboardUrl = "/dashboard/tenant";
+
+    if (user?.data?.myProfile.role === 'ADMIN') {
+        dashboardUrl = "/dashboard/admin"
+    } else if (user?.data?.myProfile.role === 'LANDLORD') {
+        dashboardUrl = "/dashboard/landlord"
+
+    } else {
+        dashboardUrl = "/dashboard/tenant"
     }
 
     return (
@@ -74,9 +87,10 @@ export function Navbar({ user }: NavbarProps) {
                 <div className="hidden items-center space-x-4 lg:flex">
 
                     {/* Logged In User Avatar with Dropdown */}
-                    {user ? (
+                    {user && user.success ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger className="relative flex h-10 w-10 items-center justify-center rounded-full p-0 ring-2 ring-primary/20 transition hover:ring-primary">
+
                                 <Avatar className="h-10 w-10">
                                     <AvatarImage src={user?.data?.myProfile.profile.profilePhoto} alt={user?.data?.myProfile.name || "User"} />
                                     <AvatarFallback className="bg-primary/10 text-primary font-semibold">
@@ -94,7 +108,7 @@ export function Navbar({ user }: NavbarProps) {
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuItem className="cursor-pointer">
-                                        <Link href="/dashboard" className="flex items-center">
+                                        <Link href={dashboardUrl} className="flex items-center">
                                             <LayoutDashboard className="mr-2 h-4 w-4" />
                                             <span>Dashboard</span>
                                         </Link>
