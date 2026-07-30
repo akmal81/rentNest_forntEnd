@@ -49,7 +49,7 @@ export function PropertySearchBar() {
                 defaultValue={searchParams.get("searchTerm") ? searchParams.get("searchTerm")?.toString() : ""}
 
                 onChange={(e) => handleChange(e.target.value)}
-                placeholder="Search news..."
+                placeholder="Search Properties..."
                 className="pl-9"
             />
         </div>
