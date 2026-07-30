@@ -85,22 +85,10 @@ export function PriceRangeFilter() {
 
     return (
         <div className="">
-            <SearchIcon className="
-            pointer-events-none
-            absolute
-            top-1/2
-            left-3
-            size-4
-            -translate-y-1/2
-            text-muted-foreground
-            "/>
             <Input
-
-                // defaultValue={searchParams.get("priceRange") ? searchParams.get("priceRange")?.toString() : ""}
                 value={searchParams.get("priceRange") ?? ""}
                 onChange={(e) => handlePriceChange(e.target.value)}
                 placeholder="Price Range"
-            // className="bg-primary-foreground"
             />
         </div>
     );
@@ -142,7 +130,7 @@ const selectedAmenities = JSON.parse(
 
     return (
         <Popover>
-            <PopoverTrigger render={<Button variant="outline" className="w-[200px] justify-between" />}>
+            <PopoverTrigger render={<Button variant="outline" className=" justify-between" />}>
                 {selectedAmenities.length > 0
                     ? `${selectedAmenities.length} selected`
                     : "Select Amenities"}
@@ -182,4 +170,55 @@ export function ResetFilter() {
     );
 }
 
+
+
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function PropertyTypeFilter({categories}:{categories:any[]}) {
+
+    const pathname = usePathname()
+    const router = useRouter()
+    const searchParams = useSearchParams();
+
+    const handleTypeChange = (value: string | null) => {
+        // const params = new URLSearchParams();
+        const params = new URLSearchParams(searchParams.toString());
+
+        if (value) {
+            params.set("type", value)
+        } else {
+            params.delete("type")
+        }
+        router.replace(`${pathname}?${params.toString()}`);
+    };
+
+    return (
+        // <div className="w-full flex items-center justify-between gap-4 max-w-xs space-y-2">
+        <Select
+            value={searchParams.get("location") ?? ""}
+            onValueChange={handleTypeChange}>
+            <SelectTrigger>
+                <SelectValue placeholder="Select Type" />
+            </SelectTrigger>
+            <SelectContent>
+                {/* <SelectItem value="Dhaka">Dhaka</SelectItem>
+                <SelectItem value="Chittagong">Chittagong</SelectItem>
+                <SelectItem value="Rajshahi">Rajshahi</SelectItem>
+                <SelectItem value="Khulna">Khulna</SelectItem>
+                <SelectItem value="Sylhet">Sylhet</SelectItem> */}
+
+                    {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        categories.map((category:any)=>(
+                            <SelectItem key={category.id} value={category.name}>
+                                {category.name.toUpperCase()}
+                            </SelectItem>
+                        ))
+                    }
+            </SelectContent>
+        </Select>
+        // </div>
+    );
+}
 

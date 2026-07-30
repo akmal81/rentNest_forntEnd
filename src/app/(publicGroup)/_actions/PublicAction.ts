@@ -46,6 +46,38 @@ export const getPropertyDetails = async (id: string): Promise<PropertyDetails | 
 }
 
 
+
+export const getPropertyCategory = async () => {
+
+    try {
+        const res = await fetch(`${backendApi}/api/categories`, {
+            cache: "force-cache",
+
+            next: {
+                revalidate: 60 * 60 * 24 * 7,
+
+                tags: [`property-category`],
+
+            }
+        })
+
+        const result = await res.json();
+
+
+        console.log(result?.data?.categories);
+        return result?.data?.categories ?? [];
+
+
+
+    } catch (error) {
+        console.error("Error fetching Categories:", error);
+        return [];
+    }
+
+
+}
+
+
 export const getAllPublicProperties = async (
     { query }: { query?: { [key: string]: string | string[] | undefined } }
 ) => {
