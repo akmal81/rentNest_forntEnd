@@ -2,7 +2,7 @@
 import { getFeaturedPost } from "./_actions/PublicAction";
 import { PropertySkeleton } from "./_components/properySkeleton";
 import { Suspense } from "react";
-import { FeaturedProperyList } from "./_components/FeaturedProperyList";
+import { ProperyList } from "./_components/ProperyList";
 
 
 
@@ -23,7 +23,7 @@ export default async function Home() {
 
       </div>
       <Suspense fallback={<PropertySkeleton />}>
-        <FeaturedProperyList properties={properties} />
+        <ProperyList properties={properties} />
       </Suspense>
     </div>
   );

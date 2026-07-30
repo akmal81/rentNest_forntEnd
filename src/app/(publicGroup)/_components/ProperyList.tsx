@@ -1,16 +1,13 @@
 import { IPropertiesProps } from "@/types";
 import { PropertyCard } from "./ProperyCard";
 
-export async function FeaturedProperyList({ properties }: IPropertiesProps) {
+export async function ProperyList({ properties }: IPropertiesProps) {
 
-    const featuredProperties = properties
-        // ?.filter((item) => item?.isFeatured)
-        // ?.slice(0, 4) || [];
-        console.log(featuredProperties.length, "list");
+//    console.log(properties, "list");
     return (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredProperties.length > 0 ? (
-                featuredProperties.map((property) => (
+            {properties ? (
+                properties.map((property) => (
                     <PropertyCard key={property.id} property={property} />
                 ))
             ) : (

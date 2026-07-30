@@ -28,7 +28,7 @@ export function Navbar({ user }: NavbarProps) {
 
     const navLinks = [
         { name: "HOME", href: "/" },
-        { name: "SEARCH", href: "/search" },
+        { name: "Properties", href: "/properties" },
         { name: "RENT", href: "/rent" },
         { name: "ABOUT", href: "/about" },
         { name: "CONTACT", href: "/contact" },

@@ -1,6 +1,6 @@
 "use server"
 
-import { PropertyDetails, SinglePropertyApiResponse } from "@/types";
+import { PropertyDetails, QueryProps, SinglePropertyApiResponse } from "@/types";
 
 const backendApi = process.env.NEXT_PUBLIC_BACKEND_API_URL
 
@@ -26,12 +26,13 @@ export const getPropertyDetails = async (id: string): Promise<PropertyDetails | 
 
     try {
         const res = await fetch(`${backendApi}/api/properties/${id}`, {
-            cache: "force-cache",
             next: {
-                revalidate: 60 * 60 * 24
+
+                tags: [`property-${id}`],
+
             }
         })
-        const result:SinglePropertyApiResponse = await res.json();
+        const result: SinglePropertyApiResponse = await res.json();
 
         return result?.data?.propertyDetails
 
@@ -44,4 +45,52 @@ export const getPropertyDetails = async (id: string): Promise<PropertyDetails | 
 
 }
 
+
+export const getAllPublicProperties = async (
+    { query }: { query?: { [key: string]: string | string[] | undefined } }
+) => {
+
+    try {
+
+        const params = new URLSearchParams();
+
+        if (query && query?.searchTerm) {
+            params.set("searchTerm", query.searchTerm as string)
+        }
+        if (query && query?.location) {
+            params.set("location", query.location as string)
+        }
+        if (query && query?.priceRange) {
+            params.set("priceRange", query.priceRange as string)
+        }
+        if (query && query?.type) {
+            params.set("type", query.type as string)
+        }
+
+        if (query?.amenities || Array.isArray(query?.amenities)) {
+            params.set("amenities", query?.amenities as string)
+        }
+
+
+        console.log(params.toString(), "url search params");
+
+        const res = await fetch(`${backendApi}/api/properties?${params.toString()}`, {
+            headers: {},
+            cache: "force-cache",
+            next: {
+                revalidate: 60 * 60 * 6,
+                tags: ["all-properties"]
+            }
+        })
+
+        const result = await res.json();
+
+        // console.log(result?.data?.data, "actions");
+        return result?.data?.data
+
+    } catch (error) {
+        return null
+    }
+
+}
 

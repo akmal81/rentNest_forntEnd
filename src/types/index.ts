@@ -206,3 +206,6 @@ export interface SinglePropertyApiResponse {
         propertyDetails: PropertyDetails;
     };
 }
+
+
+export type QueryProps = {query?:{[key:string]:string | string[]|undefined}}
