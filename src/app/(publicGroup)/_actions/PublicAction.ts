@@ -71,9 +71,6 @@ export const getAllPublicProperties = async (
             params.set("amenities", query?.amenities as string)
         }
 
-
-        console.log(params.toString(), "url search params");
-
         const res = await fetch(`${backendApi}/api/properties?${params.toString()}`, {
             headers: {},
             cache: "force-cache",

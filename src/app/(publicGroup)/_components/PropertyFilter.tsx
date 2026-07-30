@@ -6,11 +6,11 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { amenities } from "../_config/Amenities";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, SearchIcon } from "lucide-react";
@@ -22,9 +22,11 @@ export function LocationFilter() {
 
     const pathname = usePathname()
     const router = useRouter()
+    const searchParams = useSearchParams();
 
     const handleLocationChange = (value: string | null) => {
-        const params = new URLSearchParams();
+        // const params = new URLSearchParams();
+        const params = new URLSearchParams(searchParams.toString());
 
         if (value) {
             params.set("location", value)
@@ -35,20 +37,22 @@ export function LocationFilter() {
     };
 
     return (
-        <div className="w-full flex items-center justify-between gap-4 max-w-xs space-y-2">
-            <Select onValueChange={handleLocationChange}>
-                <SelectTrigger>
-                    <SelectValue placeholder="Select Location" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="Dhaka">Dhaka</SelectItem>
-                    <SelectItem value="Chittagong">Chittagong</SelectItem>
-                    <SelectItem value="Rajshahi">Rajshahi</SelectItem>
-                    <SelectItem value="Khulna">Khulna</SelectItem>
-                    <SelectItem value="Sylhet">Sylhet</SelectItem>
-                </SelectContent>
-            </Select>
-        </div>
+        // <div className="w-full flex items-center justify-between gap-4 max-w-xs space-y-2">
+        <Select
+            value={searchParams.get("location") ?? ""}
+            onValueChange={handleLocationChange}>
+            <SelectTrigger>
+                <SelectValue placeholder="Select Location" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectItem value="Dhaka">Dhaka</SelectItem>
+                <SelectItem value="Chittagong">Chittagong</SelectItem>
+                <SelectItem value="Rajshahi">Rajshahi</SelectItem>
+                <SelectItem value="Khulna">Khulna</SelectItem>
+                <SelectItem value="Sylhet">Sylhet</SelectItem>
+            </SelectContent>
+        </Select>
+        // </div>
     );
 }
 
@@ -57,17 +61,26 @@ export function PriceRangeFilter() {
 
     const pathname = usePathname()
     const router = useRouter()
+    const searchParams = useSearchParams();
+
+    const debouncedReference = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     const handlePriceChange = (value: string | null) => {
-        const params = new URLSearchParams();
-
-        if (value) {
-            params.set("priceRange", value)
-        } else {
-            params.delete("priceRange")
+        if (debouncedReference.current) {
+            clearTimeout(debouncedReference.current)
         }
-        router.replace(`${pathname}?${params.toString()}`);
-        console.log(pathname, "pathname");
+        debouncedReference.current = setTimeout(() => {
+            // const params = new URLSearchParams();
+            const params = new URLSearchParams(searchParams.toString());
+
+            if (value) {
+                params.set("priceRange", value)
+            } else {
+                params.delete("priceRange")
+            }
+            router.replace(`${pathname}?${params.toString()}`);
+            console.log(pathname, "pathname");
+        }, 500)
     };
 
     return (
@@ -83,10 +96,11 @@ export function PriceRangeFilter() {
             "/>
             <Input
 
-                // defaultValue={searchParams.get("searchTerm") ? searchParams.get("searchTerm")?.toString() : ""}
-
+                // defaultValue={searchParams.get("priceRange") ? searchParams.get("priceRange")?.toString() : ""}
+                value={searchParams.get("priceRange") ?? ""}
                 onChange={(e) => handlePriceChange(e.target.value)}
                 placeholder="Price Range"
+            // className="bg-primary-foreground"
             />
         </div>
     );
@@ -97,29 +111,33 @@ export function AmenitiesFilter() {
 
     const pathname = usePathname()
     const router = useRouter()
-    const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-
+    const searchParams = useSearchParams();
+    // const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+const selectedAmenities = JSON.parse(
+  searchParams.get("amenities") ?? "[]"
+);
     const handleCheckboxChange = (amenity: string, checked: boolean) => {
 
         let updatedAmenityList: string[];
         if (checked) {
             updatedAmenityList = [...selectedAmenities, amenity];
         } else {
-            updatedAmenityList = selectedAmenities.filter((item) => item !== amenity);
+            updatedAmenityList = selectedAmenities.filter((item:string) => item !== amenity);
         }
-        setSelectedAmenities(updatedAmenityList);
+        // setSelectedAmenities(updatedAmenityList);
 
-        const params = new URLSearchParams();
+        // const params = new URLSearchParams();
+        const params = new URLSearchParams(searchParams.toString());
 
-        if (updatedAmenityList) {
+        if (updatedAmenityList.length>0) {
             params.set("amenities", JSON.stringify(updatedAmenityList))
         } else {
             params.delete("amenities")
+            
         }
 
         router.replace(`${pathname}?${params}`);
 
-        console.log("Selected Amenities:", updatedAmenityList);
     };
 
     return (
@@ -155,13 +173,10 @@ export function ResetFilter() {
     const pathname = usePathname()
     const router = useRouter()
 
-    const handleReset = () => {
 
-        router.replace(`${pathname}`);
-    }
 
     return (
-        <Button className="cursor-pointer" onClick={handleReset}>
+        <Button className="cursor-pointer" onClick={()=>router.replace(pathname)}>
             Reset
         </Button>
     );
