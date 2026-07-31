@@ -3,7 +3,8 @@ import { getAllPublicProperties, getPropertyCategory } from '../_actions/PublicA
 import { PropertySkeleton } from '../_components/properySkeleton'
 import { ProperyList } from '../_components/ProperyList';
 import { PropertySearchBar } from '../_components/SearchBar';
-import { AmenitiesFilter, AmenitiesFilter2, LocationFilter, PriceRangeFilter, PropertyTypeFilter, ResetFilter } from '../_components/PropertyFilter';
+import {AmenitiesFilter2, LocationFilter, PriceRangeFilter, PropertyTypeFilter, ResetFilter } from '../_components/PropertyFilter';
+import { LocalcategorArray } from '../_config/LocalCategories';
 
 
 export default async function AllPropertyPage({
@@ -15,6 +16,10 @@ export default async function AllPropertyPage({
   const query = await searchParams
   const properties = await getAllPublicProperties({ query })
   const categories = await getPropertyCategory();
+
+  // if(!categories){
+  //   categories = LocalcategorArray
+  // }
 
 
   return (

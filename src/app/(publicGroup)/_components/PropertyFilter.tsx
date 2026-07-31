@@ -63,10 +63,16 @@ export function PriceRangeFilter() {
     const pathname = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams();
+    const [price, setPrice] = useState(searchParams.get("priceRange") ?? "");
 
     const debouncedReference = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+
     const handlePriceChange = (value: string | null) => {
+        if (value) {
+            setPrice(value)
+        }
+
         if (debouncedReference.current) {
             clearTimeout(debouncedReference.current)
         }
@@ -74,20 +80,25 @@ export function PriceRangeFilter() {
             // const params = new URLSearchParams();
             const params = new URLSearchParams(searchParams.toString());
 
-            if (value) {
+            if (value?.trim()) {
                 params.set("priceRange", value)
             } else {
                 params.delete("priceRange")
             }
-            router.replace(`${pathname}?${params.toString()}`);
-            console.log(pathname, "pathname");
+
+            const queryString = params
+                .toString()
+                .replace(/\+/g, "%20");
+
+            router.replace(`${pathname}?${queryString}`);
+
         }, 500)
     };
 
     return (
-        <div className="">
+        <div className="w-fit">
             <Input
-                value={searchParams.get("priceRange") ?? ""}
+                value={price}
                 onChange={(e) => handlePriceChange(e.target.value)}
                 placeholder="Price Range"
             />
@@ -166,9 +177,6 @@ export function PriceRangeFilter() {
 export function ResetFilter() {
     const pathname = usePathname()
     const router = useRouter()
-
-
-
     return (
         <Button className="cursor-pointer" onClick={() => router.replace(pathname)}>
             Reset
@@ -183,24 +191,6 @@ export function ResetFilter() {
 
 export function PropertyTypeFilter({ categories }: { categories: IcategoryResponse[] }) {
 
-    const LocalcategorArray = [
-        {
-            id: "1",
-            name: "APARTMENT"
-        },
-        {
-            id: "2",
-            name: "HOUSE"
-        },
-        {
-            id: "3",
-            name: "STUDIO"
-        },
-        {
-            id: "3",
-            name: "COMMERCIAL"
-        },
-    ]
     const pathname = usePathname()
     const router = useRouter()
     const searchParams = useSearchParams();
@@ -227,19 +217,11 @@ export function PropertyTypeFilter({ categories }: { categories: IcategoryRespon
             </SelectTrigger>
             <SelectContent>
                 {
-                    categories ?
-
-                        categories.map((category: IcategoryResponse) => (
-                            <SelectItem key={category.id} value={category.name}>
-                                {category.name.toUpperCase()}
-                            </SelectItem>
-                        ))
-                        :
-                        LocalcategorArray.map((category) => (
-                            <SelectItem key={category.id} value={category.name}>
-                                {category.name.toUpperCase()}
-                            </SelectItem>
-                        ))
+                    categories.map((category: IcategoryResponse) => (
+                        <SelectItem key={category.id} value={category.name}>
+                            {category.name.toUpperCase()}
+                        </SelectItem>
+                    ))
                 }
             </SelectContent>
         </Select>
