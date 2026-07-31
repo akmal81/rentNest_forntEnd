@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import jwt, { JwtPayload } from "jsonwebtoken"
 
 
-const backendApi = process.env.NEXT_PUBLIC_BACKEND_API_URL
+const backendApi = process.env.NEXT_PUBLIC_BACKEND_API_URL ||  process.env.BACKEND_API_URL
 
 export const RegistarAction = async (prevState: RegisterApiResponse, data: RegisterFormValues) => {
 
@@ -17,9 +17,9 @@ export const RegistarAction = async (prevState: RegisterApiResponse, data: Regis
         profilePhoto:data.profilePhoto,
         password: data.password
     }
-    console.log("Backend URL:", process.env.NEXT_PUBLIC_BACKEND_API_URL);
+  
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}/api/auth/register`, {
+    const res = await fetch(`${backendApi}/api/auth/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

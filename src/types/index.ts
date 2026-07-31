@@ -209,3 +209,14 @@ export interface SinglePropertyApiResponse {
 
 
 export type QueryProps = {query?:{[key:string]:string | string[]|undefined}}
+
+
+export interface IcategoryResponse {
+    id: string,
+    name: string,
+    slug: string,
+    description: string,
+    createdAt: string,
+    updatedAt: string,
+    _count: { properties: number }
+  }

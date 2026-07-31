@@ -2,7 +2,7 @@
 import { jwtUtils } from "@/utils/jwt";
 import { cookies } from "next/headers"
 
-
+const backendApi = process.env.NEXT_PUBLIC_BACKEND_API_URL ||  process.env.BACKEND_API_URL
 
 
 export const getNewAccessTokenByRefreshToken = async () => {
@@ -16,7 +16,7 @@ export const getNewAccessTokenByRefreshToken = async () => {
         }
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/refresh-token`,{
+    const res = await fetch(`${backendApi}/api/auth/refresh-token`,{
         method: "POST",
         headers:{
             Cookie: `refreshToken=${refreshToken}`

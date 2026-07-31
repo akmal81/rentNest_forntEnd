@@ -1,8 +1,8 @@
 "use server"
 
-import { PropertyDetails, QueryProps, SinglePropertyApiResponse } from "@/types";
+import { PropertyDetails, SinglePropertyApiResponse } from "@/types";
 
-const backendApi = process.env.NEXT_PUBLIC_BACKEND_API_URL
+const backendApi = process.env.NEXT_PUBLIC_BACKEND_API_URL || process.env.BACKEND_API_URL
 
 
 export const getFeaturedPost = async () => {
@@ -62,12 +62,7 @@ export const getPropertyCategory = async () => {
         })
 
         const result = await res.json();
-
-
-        console.log(result?.data?.categories);
         return result?.data?.categories ?? [];
-
-
 
     } catch (error) {
         console.error("Error fetching Categories:", error);
@@ -99,15 +94,23 @@ export const getAllPublicProperties = async (
             params.set("type", query.type as string)
         }
 
-        if (query?.amenities || Array.isArray(query?.amenities)) {
-            params.set("amenities", query?.amenities as string)
+        // if (query?.amenities || Array.isArray(query?.amenities)) {
+        //     params.set("amenities", query?.amenities as string)
+        // }
+
+
+        if (query?.amenities) {
+            const amenitiesValue = Array.isArray(query.amenities)
+                ? query.amenities.join(",")
+                : query.amenities;
+
+            params.set("amenities", amenitiesValue);
         }
 
         const res = await fetch(`${backendApi}/api/properties?${params.toString()}`, {
             headers: {},
-            cache: "force-cache",
+            cache: "no-store",
             next: {
-                revalidate: 60 * 60 * 6,
                 tags: ["all-properties"]
             }
         })

@@ -3,7 +3,7 @@ import { getAllPublicProperties, getPropertyCategory } from '../_actions/PublicA
 import { PropertySkeleton } from '../_components/properySkeleton'
 import { ProperyList } from '../_components/ProperyList';
 import { PropertySearchBar } from '../_components/SearchBar';
-import { AmenitiesFilter, LocationFilter, PriceRangeFilter, PropertyTypeFilter, ResetFilter } from '../_components/PropertyFilter';
+import { AmenitiesFilter, AmenitiesFilter2, LocationFilter, PriceRangeFilter, PropertyTypeFilter, ResetFilter } from '../_components/PropertyFilter';
 
 
 export default async function AllPropertyPage({
@@ -15,7 +15,7 @@ export default async function AllPropertyPage({
   const query = await searchParams
   const properties = await getAllPublicProperties({ query })
   const categories = await getPropertyCategory();
-  console.log(categories);
+
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 py-10 sm:px-6 lg:px-8">
@@ -35,7 +35,7 @@ export default async function AllPropertyPage({
             <LocationFilter />
           </div>
           <div>
-            <AmenitiesFilter />
+            <AmenitiesFilter2 />
 
           </div>
           <div><PriceRangeFilter /></div>

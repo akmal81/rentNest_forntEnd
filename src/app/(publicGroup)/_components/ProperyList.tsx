@@ -12,7 +12,7 @@ export async function ProperyList({ properties }: IPropertiesProps) {
                 ))
             ) : (
                 <p className="col-span-full text-center text-muted-foreground py-8">
-                    No featured properties found.
+                    properties found.
                 </p>
             )}
         </div>
